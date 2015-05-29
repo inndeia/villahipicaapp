@@ -15,7 +15,7 @@
 		<script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript">
-			
+		
 			$( document ).ready(function() {
 				var tag = 'resortvillahipica';
 				var next_url ='';			
@@ -32,12 +32,22 @@
 				           	header += '<tr>';
 				           	header += '<td>';
 			           		header += (i+1);
+			           		header += '<imput type="hidden" name="id" value="'+data.data[i].id+'"/>';
 			           		header += '</td>';
 				           	header += '<td>';
 			           		header += '<img src="'+data.data[i].images.thumbnail.url+'" alt="" >';
-			           		header += '</td>';			           		
+			           		header += '<imput type="hidden" name="thumbnail" value="'+data.data[i].images.thumbnail.url+'"/>';
+			           		header += '<imput type="hidden" name="low_resolution" value="'+data.data[i].images.low_resolution.url+'"/>';
+			           		header += '<imput type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
+			           		header += '</td>';
+			           		header += '<td> <p>';
+			           		for (y = 0; y < data.data[i].tags.length; y++) {
+			           			header += '#'+data.data[i].tags[y]+' ';
+			           			header += '<imput type="hidden" name="tags[]" value="'+data.data[i].tags[y]+'"/>';
+			           		}
+			           		header += '</p></td>';				           		
 			           		header += '<td>';
-			           		header += '<button class="btn btn-success" id="btn" >Adicionar ao Silde</button>';
+			           		header += '<a class="btn btn-success teste" id="btnAdicionar'+i+'" onclick="javascript:Adicionar();">Adicionar ao Silde</a>';
 			           		header += '</td>';
 			           		header += '</tr>';
 			           	}		                
@@ -68,9 +78,14 @@
 				           		header += '</td>';
 					           	header += '<td>';
 				           		header += '<img src="'+data.data[i].images.thumbnail.url+'" alt="" >';
-				           		header += '</td>';			           		
+				           		header += '</td>';
+				           		header += '<td> <p>';
+				           		for (y = 0; y < data.data[i].tags.length; y++) {
+				           			header += '#'+data.data[i].tags[y]+' ';
+				           		}
+				           		header += '</p></td>';				           		
 				           		header += '<td>';
-				           		header += '<button class="btn btn-success" id="" >Adicionar ao Silde</button>';
+				           		header += '<button class="btn btn-success" id="btnAdicionar" onclick="Adicionar();" >Adicionar ao Silde</button>';
 				           		header += '</td>';
 				           		header += '</tr>';
 				           	}		                
@@ -102,9 +117,14 @@
 				           		header += '</td>';
 					           	header += '<td>';
 				           		header += '<img src="'+data.data[i].images.thumbnail.url+'" alt="" >';
-				           		header += '</td>';			           		
+				           		header += '</td>';	
+				           		header += '<td> <p>';
+				           		for (y = 0; y < data.data[i].tags.length; y++) {
+				           			header += '#'+data.data[i].tags[y]+' ';
+				           		}
+				           		header += '</p></td>';			           		
 				           		header += '<td>';
-				           		header += '<button class="btn btn-success" id="" >Adicionar ao Silde</button>';
+				           		header += '<button class="btn btn-success" id="btnAdicionar" onclick="Adicionar();>Adicionar ao Silde</button>';
 				           		header += '</td>';
 				           		header += '</tr>';
 				           	}		                
@@ -119,8 +139,29 @@
 		
 				    	}	
 					});
+					$('.teste').click(function(){	
+						alert('teste');
+					});
 				});	
+				$('.teste').click(function(){	
+					alert('teste');
+				});
+				$(function(){
+					function Adicionar(){
+						console.log('eee');
+						var par = $(this).parent().parent();
+						var id_foto  = par.children("td:nth-child(1)");
+						var images  = par.children("td:nth-child(2)");
+						var tags  = par.children("td:nth-child(3)");
+						console.log(id_foto.children("input[type=hidden]").val());
+						
+					}
+					$("#btnAdicionar").bind("click", Adicionar); 
+				});
+				
 			});	
+
+			
 		</script>
 	</body>
 </html>

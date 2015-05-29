@@ -33,6 +33,9 @@
 							Fotos
 						</th>
 						<th>
+							#hastags
+						</th>
+						<th>
 							Ações
 						</th>
 					</tr>
