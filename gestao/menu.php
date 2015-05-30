@@ -8,11 +8,14 @@
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li>
+						<!-- <li>
 							<a href="user.php">Usuários</a>
-						</li>
-						<li class="active">
+						</li> -->
+						<li>
 							<a href="dashboard.php">Fotos Instagram</a>
+						</li>
+						<li>
+							<a href="slide.php">Fotos Slide</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">

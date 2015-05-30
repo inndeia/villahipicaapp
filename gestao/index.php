@@ -18,10 +18,6 @@
 										$msg = 'Erro ao conectar ao banco de dados!';
 										$alert = '';
 										break;
-									case '4':
-										$msg = 'Erro ao localizar banco de dados!';
-										$alert = '';
-										break;
 									case '5':
 										$msg = 'Email ou senha inválido!';
 										$alert = '';
@@ -62,5 +58,5 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	
 <?php require_once('footer.php')?>
