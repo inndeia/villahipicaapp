@@ -1,0 +1,3 @@
+http://www.linhadecodigo.com.br/artigo/3426/editando-e-removendo-linhas-em-uma-tabela-html-com-jquery.aspx
+http://www.devmedia.com.br/criando-um-cadastro-com-php-ajax-e-jquery/28046
+http://www.linhadecomando.com/jquery/jquery-obtendo-valores-de-um-array-inputs

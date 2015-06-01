@@ -1,3 +1,13 @@
+<?php 
+session_start(); 
+if((!isset ($_SESSION['UserID']) == true) and (!isset ($_SESSION['UserNome']) == true)) { 
+	unset($_SESSION['UserID']); 
+	unset($_SESSION['UserNome']); 
+	unset($_SESSION['UserTipo']);
+	header('location:index.php'); 
+}
+$nome = $_SESSION['UserNome'];
+?>
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-12 column">
@@ -8,11 +18,21 @@
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
+						<?php if($_SESSION['UserTipo'] == 1){?>
 						<li>
 							<a href="user.php">Usuários</a>
 						</li>
-						<li class="active">
+						<?php }?>
+						<?php if($_SESSION['UserTipo'] == 1){?>
+						<li>
+							<a href="config.php">Configurações</a>
+						</li>
+						<?php }?>
+						<li>
 							<a href="dashboard.php">Fotos Instagram</a>
+						</li>
+						<li>
+							<a href="slide.php">Fotos Slide</a>
 						</li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
