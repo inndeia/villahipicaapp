@@ -58,7 +58,6 @@
 				$("#btnCadastrar").click(function(){
 					var dados = [$('#nome'),$('#email'),$('#pass'),$('#tipo')];
 					if(validarDados(dados)){
-						console.log('entrou0');
 						$.ajax({
 					    	method: 'POST',
 				            url: 'ajax/userCadastrarAjax.php', 
@@ -71,9 +70,12 @@
 					    		if(data.success){
 						    		$('#modal-cadastrar').modal('hide');
 						    		$('#form_cadastro').each (function(){
-						    			  this.reset();
-						    			  this.parent().removeClass('has-error');
+						    			  this.reset();						    			  
 						    		});
+						    		$('#nome').parent().removeClass('has-error');
+									$('#email').parent().removeClass('has-error');
+									$('#pass').parent().removeClass('has-error');
+									$('#tipo').parent().removeClass('has-error');
 						    		$('#msg').html('');
 						    		alert('Cadastrado com sucesso!');
 						    		atualizarUsers();
@@ -121,15 +123,63 @@
 				    	url: 'ajax/userEditAjax.php',            
 				    	data: {id:id},                 
 				    	success: function(data) {
+				    		$('#id_edit').val(''+data[0].id);
 			    	  		$('#nome_edit').val(''+data[0].nome);
 				    		$('#email_edit').val(''+data[0].email);
 				    		$('#pass_edit').val(''+data[0].pass);
-				    		$('#tipo_edit').children()
-
+				    		$('#tipo_edit option[value="'+data[0].tipo+'"]').attr('selected','selected');
 					    	$('#modal-Editar').modal('show');
 				    	}
 				    });
 
+				});
+				$('#tbl3').on('click', '#btnRemoverUser', function (event) {
+
+				    var $botao = $(event.target);
+				    var $tr = $botao.closest('tr');
+				    var id = $tr.children("td:nth-child(1)");
+					id = id.children("input[name=id]").val();
+				    $.ajax({                 
+				    	type: 'POST',                 
+				    	dataType: 'json',                 
+				    	url: 'ajax/userRemoveAjax.php',            
+				    	data: {id:id},                 
+				    	success: function(data) {
+				    		if(data.success){
+					    		alert('Removido com sucesso!');
+					    		atualizarUsers();
+				    		}else{
+				    			alert('Erro ao remover com sucesso!');
+				    		}
+				    	}
+				    });
+
+				});
+				$('#btnAlterar').click(function(){
+		    		var dados = [$('#nome_edit'),$('#email_edit'),$('#pass_edit'),$('#tipo_edit'),$('#id_edit')];
+					if(validarDados(dados)){
+			    		$.ajax({                 
+					    	type: 'POST',                 
+					    	dataType: 'json',                 
+					    	url: 'ajax/userEditUploadAjax.php',            
+					    	data: { id:dados[4].val(),
+					    			nome:dados[0].val(),
+				            	  	email:dados[1].val(),
+				            	  	pass:dados[2].val(),
+				            	  	tipo:dados[3].val(),},                 
+					    	success: function(data) {
+					    		if(data.success){
+						    		$('#modal-Editar').modal('hide');
+						    		$('#msg').html('');
+						    		alert('Alteração realizada com sucesso!');
+						    		atualizarUsers();
+					    		}else{
+					    			$('#email').parent().addClass('has-error');
+					    			$('#msg').html('Email já cadastrado!');
+					    		}
+					    	}
+					    });
+					}
 				});
 				function validarDados(dados){
 					var retorno = true;

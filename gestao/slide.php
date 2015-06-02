@@ -37,7 +37,7 @@ $nome = $_SESSION['UserNome'];
 						<th>
 							Fotos
 						</th>
-						<th>
+						<th class="mobile">
 							#hastags
 						</th>
 						<th>

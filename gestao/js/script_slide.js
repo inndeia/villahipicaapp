@@ -2,7 +2,6 @@
 			$( document ).ready(function() {
 				atualizarFotos();
 				function atualizarFotos(){
-					var teste='';
 					$.ajax({
 				    	method: "POST",
 			            url: 'ajax/slideAjax.php', 
@@ -22,7 +21,7 @@
 				           		// header += '<input type="hidden" name="thumbnail" value="'+data.data[i].images.thumbnail.url+'"/>';
 				           		// header += '<input type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
 				           		header += '</td>';
-				           		header += '<td> <p>';
+				           		header += '<td class="mobile"> <p>';
 				           		for (y = 0; y < dados[i].tags.length; y++) {
 				           			header += '#'+dados[i].tags[y]+' ';
 				           			header += '<input type="hidden" name="tags[]" value="'+dados[i].tags[y]+'"/>';

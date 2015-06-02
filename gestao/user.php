@@ -122,6 +122,7 @@ $nome = $_SESSION['UserNome'];
 									<form role="form" id="form_editar">
 										<div class="form-group">
 											 <label for="nome">Nome</label><input type="text" class="form-control" id="nome_edit" name="nome" />
+											 <input type="hidden" class="form-control" id="id_edit" name="id_edit" />
 										</div>
 										<div class="form-group">
 											 <label for="email">Email</label><input type="email" class="form-control" id="email_edit" name="email" />

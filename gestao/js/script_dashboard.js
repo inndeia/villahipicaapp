@@ -42,7 +42,7 @@
 					           		header += '<input type="hidden" name="low_resolution" value="'+data.data[i].images.low_resolution.url+'"/>';
 					           		header += '<input type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
 					           		header += '</td>';
-					           		header += '<td> <p>';
+					           		header += '<td class="mobile"> <p>';
 					           		for (y = 0; y < data.data[i].tags.length; y++) {
 					           			header += '#'+data.data[i].tags[y]+' ';
 					           			header += '<input type="hidden" name="tags[]" value="'+data.data[i].tags[y]+'"/>';
@@ -82,7 +82,7 @@
 					           		header += '<input type="hidden" name="low_resolution" value="'+data.data[i].images.low_resolution.url+'"/>';
 					           		header += '<input type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
 					           		header += '</td>';
-					           		header += '<td> <p>';
+					           		header += '<td class="mobile"> <p>';
 					           		for (y = 0; y < data.data[i].tags.length; y++) {
 					           			header += '#'+data.data[i].tags[y]+' ';
 					           			header += '<input type="hidden" name="tags[]" value="'+data.data[i].tags[y]+'"/>';
@@ -136,11 +136,6 @@
 				    });
 
 				});
-
-				
-				
-
-				
 			});	
 				var tempo = new Number();
 				// Tempo em segundos

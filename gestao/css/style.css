@@ -63,3 +63,8 @@ img{
 #msg{
 	color:#DD2E2E;
 }
+@media screen and (max-width: 768px) {
+	.mobile{
+		display:none;
+	}	
+}
