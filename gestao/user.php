@@ -65,7 +65,7 @@ $nome = $_SESSION['UserNome'];
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+							 <button type="button" class="close" id="cancel_cadastro" aria-hidden="true">×</button>
 							<h4 class="modal-title" id="myModalLabel">
 								Cadastro de Usuário
 							</h4>
@@ -97,7 +97,7 @@ $nome = $_SESSION['UserNome'];
 							<span id="msg"></span>
 						</div>
 						<div class="modal-footer">
-							 <button type="button" class="btn btn-default"  id="cancel_cadastro">Cancelar</button> <button type="button" class="btn btn-primary" id="btnCadastrar">Cadastar</button>
+							 <button type="button" class="btn btn-default"  id="cancel_cadastro2">Cancelar</button> <button type="button" class="btn btn-primary" id="btnCadastrar">Cadastar</button>
 						</div>
 					</div>
 				</div>

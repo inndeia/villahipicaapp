@@ -29,7 +29,7 @@
 				           		header += (dados[i].tipo == 1?'Admin':'Gestão');
 				           		header += '</td>';
 				           		header += '<td>';
-				           		header += '<a class="btn btn-primary" id="btnEdit" style="margin-right:5px;" href="#modal-Editar" role="button" data-toggle="modal"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></a>';
+				           		header += '<button  class="btn btn-primary" id="btnEdit" style="margin-right:5px;" ><span class="glyphicon glyphicon-pencil" aria-hidden="true"></button>';
 				           		header += '<button class="btn btn-danger" id="btnRemoverUser" ><span class="glyphicon glyphicon-trash" aria-hidden="true"></button>';
 				           		header += '</td>';
 				           		header += '</tr>';
@@ -97,8 +97,19 @@
 					$('#tipo').parent().removeClass('has-error');
 					$('#msg').html('');
 				});
+				$('#cancel_cadastro2').click(function(){
+					$('#modal-cadastrar').modal('hide');
+					$('#form_cadastro').each (function(){
+		    			  this.reset();
+		    		});
+					$('#nome').parent().removeClass('has-error');
+					$('#email').parent().removeClass('has-error');
+					$('#pass').parent().removeClass('has-error');
+					$('#tipo').parent().removeClass('has-error');
+					$('#msg').html('');
+				});
 				
-				$('#tbl2').on('click', '#btnRemover', function (event) {
+				$('#tbl3').on('click', '#btnEdit', function (event) {
 
 				    var $botao = $(event.target);
 				    var $tr = $botao.closest('tr');
@@ -107,11 +118,15 @@
 				    $.ajax({                 
 				    	type: 'POST',                 
 				    	dataType: 'json',                 
-				    	url: 'ajax/slideRemoverAjax.php',            
+				    	url: 'ajax/userEditAjax.php',            
 				    	data: {id:id},                 
-				    	success: function(response) {
-				    	  $tr.remove();
-				    	  atualizarFotos();
+				    	success: function(data) {
+			    	  		$('#nome_edit').val(''+data[0].nome);
+				    		$('#email_edit').val(''+data[0].email);
+				    		$('#pass_edit').val(''+data[0].pass);
+				    		$('#tipo_edit').children()
+
+					    	$('#modal-Editar').modal('show');
 				    	}
 				    });
 
