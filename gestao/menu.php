@@ -8,6 +8,11 @@ if((!isset ($_SESSION['UserID']) == true) and (!isset ($_SESSION['UserNome']) ==
 }
 $nome = $_SESSION['UserNome'];
 ?>
+<div id="pre-loading">
+	<div class="caixa_loader">
+		<img src="img/fancybox_loading@2x.gif"/>
+	</div>
+</div>
 <div class="container">
 	<div class="row clearfix">
 		<div class="col-md-12 column">

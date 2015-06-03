@@ -17,12 +17,12 @@ $nome = $_SESSION['UserNome'];
 			</div>
 		</div>
 		<div class="col-md-4 column">
-			
+			<button class="btn btn-success" id="btnAll" >Adicionar Todos</button>
 		</div>
 		<div class="col-md-4 column">
 			<div class="div_btn_atualizar">
 				<p><span id="sessao"></span></p>
-				<button class="btn btn-primary" id="btn" >Atualizar fotos</button>
+				<button class="btn btn-primary" id="btn" >Buscar Fotos</button>
 			</div>
 		</div>
 	</div>
@@ -75,7 +75,7 @@ $( document ).ready(function() {
 	var id_fotos = new Array();
 	listaIdFotos();
 	function listaIdFotos(){
-		
+		exibirLoader();			
 		$.ajax({
 			method:"POST",
 			url:"ajax/idFotosAjax.php",
@@ -83,6 +83,7 @@ $( document ).ready(function() {
 			success:function(data){
 				id_fotos = JSON.parse(data);
 				atualizarFotos();
+				esconderLoader();
 				
 			}
 		});
@@ -90,6 +91,7 @@ $( document ).ready(function() {
 	// AO CARREGAR A PAGIMA TRAZ AS FOTOS DO INSTAGRAM
 	function atualizarFotos(){
 		var teste='';
+		exibirLoader();		
 		$.ajax({
 	    	method: "POST",
             url: url, 
@@ -125,53 +127,50 @@ $( document ).ready(function() {
 	           	}	
 	           	
                 $('#fotos_instagram').html(header);
-
+                esconderLoader();
 	    	}	
 		});
 	}
 	// AO CLICAR NO BOTÃO #btn TRAZ AS FOTOS DO INSTAGRAM
 	$("#btn").click(function(){	
-	    $.ajax({
-	    	method: "GET",
-            url: url, 
-            dataType: "jsonp",    		    	
-	    	success: function(data){
-	           	var header = '';
-	           	var x = 0;
-	           	for (i = 0; i < data.data.length; i++) { 
-	           		if(jQuery.inArray( data.data[i].id, id_fotos ) < 0){
-			           	header += '<tr>';
-			           	header += '<td>';
-		           		header += (++x);
-		           		header += '<input type="hidden" name="id" value="'+data.data[i].id+'"/>';
-		           		header += '</td>';
-			           	header += '<td>';
-		           		header += '<a class="fancybox"  href="'+data.data[i].images.standard_resolution.url+'"><img src="'+data.data[i].images.thumbnail.url+'" alt="" /></a>';
-		           		header += '<input type="hidden" name="thumbnail" value="'+data.data[i].images.thumbnail.url+'"/>';
-		           		header += '<input type="hidden" name="low_resolution" value="'+data.data[i].images.low_resolution.url+'"/>';
-		           		header += '<input type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
-		           		header += '</td>';
-		           		header += '<td class="mobile"> <p>';
-		           		for (y = 0; y < data.data[i].tags.length; y++) {
-		           			header += '#'+data.data[i].tags[y]+' ';
-		           			header += '<input type="hidden" name="tags[]" value="'+data.data[i].tags[y]+'"/>';
-		           		}
-		           		header += '</p></td>';				           		
-		           		header += '<td>';
-		           		header += '<button class="btn btn-success" id="btnAdicionar" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-		           		header += '</td>';
-		           		header += '</tr>';
-	           		}
-	           	}                
-	           	
-                $('#fotos_instagram').html(header);
-				startCountdown();
-	    	}	
+		atualizarFotos();
+	    startCountdown();
+	});	
+	$('#btnAll').click(function(){
+		var table = $('#tbl');
+		var dados = new Array();
+		table.find('tr').each(function(indice){
+			var id = $(this).children("td:nth-child(1)");
+			id = id.children("input[name=id]").val();
+			var img = $(this).children("td:nth-child(2)");
+
+			var images = new Array();
+			images = [img.children("input[name=thumbnail]").val(), 
+						img.children("input[name=low_resolution]").val(),
+						img.children("input[name=standard_resolution]").val() ];
+
+			var tag = $(this).children("td:nth-child(3)");
+			var tags = new Array();
+			tag.children("p").children("input[name='tags[]']").each(function(){
+			     tags.push($(this).val());
+			  });
+
+			dados.push(new Array(id,images,tags));
 		});
-	});			
+		exibirLoader();	
+	    $.ajax({                 
+	    	type: 'POST',                 
+	    	dataType: 'json',                 
+	    	url: 'ajax/addAllAjax.php',            
+	    	data: {dados:dados},                 
+	    	success: function(response) {
+	    	  listaIdFotos();
+	    	  esconderLoader();
+	    	}
+	    });
+	});		
 
 	$('#tbl').on('click', '#btnAdicionar', function (event) {
-
 	    var $botao = $(event.target);
 	    var $tr = $botao.closest('tr');
 	    var id = $tr.children("td:nth-child(1)");
@@ -189,6 +188,7 @@ $( document ).ready(function() {
 		tag.children("p").children("input[name='tags[]']").each(function(){
 		     tags.push($(this).val());
 		  });
+		exibirLoader();	
 	    $.ajax({                 
 	    	type: 'POST',                 
 	    	dataType: 'json',                 
@@ -201,9 +201,9 @@ $( document ).ready(function() {
 	    	success: function(response) {
 	    	  $tr.remove();
 	    	  listaIdFotos();
+	    	  esconderLoader();
 	    	}
 	    });
-
 	});
 });	
 	var tempo = new Number();

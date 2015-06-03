@@ -2,6 +2,7 @@
 			$( document ).ready(function() {
 				atualizarFotos();
 				function atualizarFotos(){
+					exibirLoader();
 					$.ajax({
 				    	method: "POST",
 			            url: 'ajax/slideAjax.php', 
@@ -35,18 +36,20 @@
 				           	}	
 				           	
 			                $('#fotos_slide').html(header);
-		
+			                esconderLoader();
 				    	}	
 					});
 				}
 				$("#btn2").click(function(){
 					if(confirm('Tem certeza que deseja remover todos?')){
+						exibirLoader();
 						$.ajax({
 					    	method: 'POST',
 				            url: 'ajax/slideRemoverTodasAjax.php', 
 				            dataType: "json",
 					    	success: function(data){
 					    		atualizarFotos();
+					    		esconderLoader();
 					    	}	
 						});
 						
@@ -60,8 +63,7 @@
 				    var $tr = $botao.closest('tr');
 				    var id = $tr.children("td:nth-child(1)");
 					id = id.children("input[name=id]").val();
-					
-					console.log(id);
+					exibirLoader();
 				    $.ajax({                 
 				    	type: 'POST',                 
 				    	dataType: 'json',                 
@@ -70,9 +72,9 @@
 				    	success: function(response) {
 				    	  $tr.remove();
 				    	  atualizarFotos();
+				    	  esconderLoader();
 				    	}
 				    });
-
 				});
 				
 			});	

@@ -3,6 +3,7 @@
 				atualizarUsers();
 				function atualizarUsers(){
 					var teste='';
+					exibirLoader();
 					$.ajax({
 				    	method: "POST",
 			            url: 'ajax/userAjax.php', 
@@ -37,7 +38,7 @@
 				           	}	
 				           	
 			                $('#usuarios').html(header);
-		
+			                esconderLoader();
 				    	}	
 					});
 				}
@@ -85,7 +86,7 @@
 					    		}
 					    	}	
 						});
-					}					
+					}			
 				    
 				});
 				$('#cancel_cadastro').click(function(){

@@ -2,6 +2,12 @@
 			$(document).ready(function() {
 				$(".fancybox").fancybox();
 			});
+			function exibirLoader(){
+				$('#pre-loading').show();
+			}
+			function esconderLoader(){
+				$('#pre-loading').hide();
+			}
 		</script>
 		
 		<div class="row clearfix" style="margin-top: 100px;">
