@@ -7,7 +7,18 @@ if((!isset ($_SESSION['UserID']) == true) and (!isset ($_SESSION['UserNome']) ==
 } 
 $nome = $_SESSION['UserNome']; 
 ?>
-
+<?php 
+include 'conexao.php';
+$sql = 'SELECT * FROM config WHERE id=1';
+$result = $conect->query($sql);
+$hastag = ''; 
+$tempoAtualizacao = '';
+while($row = mysqli_fetch_array($result)) {
+	$hastag = $row['hastag'];
+	$hastag2 = $row['hastag2'];
+	$tempoAtualizacao = $row['tempo_atualizacao'];
+}
+?>
 <?php require_once('header.php')?>
 <?php require_once('menu.php')?>
 	<div class="row clearfix" style="margin-top:70px;">
@@ -29,7 +40,7 @@ $nome = $_SESSION['UserNome'];
 	<div class="row clearfix" >
 		<div class="col-md-12 column">
 			<h3 class="text-left">
-				Fotos #hastag
+				Fotos <?php echo '#'.$hastag. ($hastag2!='' ? ', #'.$hastag2 :'');?>
 			</h3>
 			<table class="table table-striped table-hover table-condensed" id="tbl">
 				<thead>
@@ -54,24 +65,15 @@ $nome = $_SESSION['UserNome'];
 			</table>
 		</div>
 	</div>
-<?php 
-include 'conexao.php';
-$sql = 'SELECT * FROM config WHERE id=1';
-$result = $conect->query($sql);
-$hastag = ''; 
-$tempoAtualizacao = '';
-while($row = mysqli_fetch_array($result)) {
-	$hastag = $row['hastag'];
-	$tempoAtualizacao = $row['tempo_atualizacao'];
-}
-?>	
-	
+
 <script type="text/javascript">
 
 $( document ).ready(function() {
 	var tag = '<?php echo $hastag;?>';
+	var tag2 = '<?php echo $hastag2;?>';
 			
 	var url = "https://api.instagram.com/v1/tags/"+ tag +"/media/recent?access_token=927180325.4181fa4.6334410f8b7147c79d2c8e040860eb16";
+	var url2 = "https://api.instagram.com/v1/tags/"+ tag2 +"/media/recent?access_token=927180325.4181fa4.6334410f8b7147c79d2c8e040860eb16";	
 	var id_fotos = new Array();
 	listaIdFotos();
 	function listaIdFotos(){
@@ -99,35 +101,105 @@ $( document ).ready(function() {
             async: false,   		    	
 	    	success: function(data){
 	           	var header = '';
+	           	header += '<h3>#'+tag+'</h3>'
 	            var x = 0;
 	           	for (i = 0; i < data.data.length; i++) { 
 	           		if(jQuery.inArray( data.data[i].id, id_fotos ) < 0){
-			           	header += '<tr>';
-			           	header += '<td>';
-		           		header += (++x);
-		           		header += '<input type="hidden" name="id" value="'+data.data[i].id+'"/>';
-		           		header += '</td>';
-			           	header += '<td>';
-			           	header += '<a class="fancybox"  href="'+data.data[i].images.standard_resolution.url+'"><img src="'+data.data[i].images.thumbnail.url+'" alt="" /></a>';
-		           		header += '<input type="hidden" name="thumbnail" value="'+data.data[i].images.thumbnail.url+'"/>';
-		           		header += '<input type="hidden" name="low_resolution" value="'+data.data[i].images.low_resolution.url+'"/>';
-		           		header += '<input type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
-		           		header += '</td>';
-		           		header += '<td class="mobile"> <p>';
-		           		for (y = 0; y < data.data[i].tags.length; y++) {
-		           			header += '#'+data.data[i].tags[y]+' ';
-		           			header += '<input type="hidden" name="tags[]" value="'+data.data[i].tags[y]+'"/>';
-		           		}
-		           		header += '</p></td>';				           		
-		           		header += '<td>';
-		           		header += '<button class="btn btn-success" id="btnAdicionar" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
-		           		header += '</td>';
-		           		header += '</tr>';
+		           		var timestamp = parseFloat(data.data[i].created_time)*1000;
+		           		var dataA = new Date(timestamp);
+		           		var month = dataA.getMonth();
+		                var day = dataA.getDate();
+		                var year = dataA.getFullYear();
+		                var dataAtual = '<?php echo date('j/n/Y')?>';
+		                var formattedTime = day + '/' + (month+1) + '/' + year;
+
+		                if(dataAtual == formattedTime){	
+				           	header += '<tr>';
+				           	header += '<td>';
+			           		header += (++x);
+			           		header += '<input type="hidden" name="id" value="'+data.data[i].id+'"/>';
+			           		header += '</td>';
+				           	header += '<td>';
+				           	header += '<a class="fancybox"  href="'+data.data[i].images.standard_resolution.url+'"><img src="'+data.data[i].images.thumbnail.url+'" alt="" /></a>';
+			           		header += '<input type="hidden" name="thumbnail" value="'+data.data[i].images.thumbnail.url+'"/>';
+			           		header += '<input type="hidden" name="low_resolution" value="'+data.data[i].images.low_resolution.url+'"/>';
+			           		header += '<input type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
+			           		header += '</td>';
+			           		header += '<td class="mobile"> <p>';
+			           		for (y = 0; y < data.data[i].tags.length; y++) {
+			           			header += '#'+data.data[i].tags[y]+' ';
+			           			header += '<input type="hidden" name="tags[]" value="'+data.data[i].tags[y]+'"/>';
+			           		}
+			           		header += '</p></td>';				           		
+			           		header += '<td>';
+			           		header += '<button class="btn btn-success" id="btnAdicionar" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			           		header += '</td>';
+			           		header += '</tr>';
+		                }
 	           		}
-	           	}	
+	           	}
+	           	if(x==0){
+                	header += '<p>Nenhuma imagem encontrada para hoje!</p>';
+                }	
 	           	
                 $('#fotos_instagram').html(header);
+                if(tag2 != null){
+                	atualizarFotos2();
+                }
                 esconderLoader();
+	    	}	
+		});
+	}
+	function atualizarFotos2(){
+		$.ajax({
+	    	method: "POST",
+            url: url2, 
+            dataType: "jsonp",
+            async: false,   		    	
+	    	success: function(data){
+	           	var header = $('#fotos_instagram').html();
+	           	header += '<h3>#'+tag2+'</h3>';
+	            var x = 0;
+	           	for (i = 0; i < data.data.length; i++) { 
+	           		if(jQuery.inArray( data.data[i].id, id_fotos ) < 0){
+	           			var timestamp = parseFloat(data.data[i].created_time)*1000;
+		           		var dataA = new Date(timestamp);
+		           		var month = dataA.getMonth();
+		                var day = dataA.getDate();
+		                var year = dataA.getFullYear();
+		                var dataAtual = '<?php echo date('j/n/Y')?>';
+		                var formattedTime = day + '/' + (month+1) + '/' + year;
+
+		                if(dataAtual == formattedTime){	
+				           	header += '<tr>';
+				           	header += '<td>';
+			           		header += (++x);
+			           		header += '<input type="hidden" name="id" value="'+data.data[i].id+'"/>';
+			           		header += '</td>';
+				           	header += '<td>';
+				           	header += '<a class="fancybox"  href="'+data.data[i].images.standard_resolution.url+'"><img src="'+data.data[i].images.thumbnail.url+'" alt="" /></a>';
+			           		header += '<input type="hidden" name="thumbnail" value="'+data.data[i].images.thumbnail.url+'"/>';
+			           		header += '<input type="hidden" name="low_resolution" value="'+data.data[i].images.low_resolution.url+'"/>';
+			           		header += '<input type="hidden" name="standard_resolution" value="'+data.data[i].images.standard_resolution.url+'"/>';
+			           		header += '</td>';
+			           		header += '<td class="mobile"> <p>';
+			           		for (y = 0; y < data.data[i].tags.length; y++) {
+			           			header += '#'+data.data[i].tags[y]+' ';
+			           			header += '<input type="hidden" name="tags[]" value="'+data.data[i].tags[y]+'"/>';
+			           		}
+			           		header += '</p></td>';				           		
+			           		header += '<td>';
+			           		header += '<button class="btn btn-success" id="btnAdicionar" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>';
+			           		header += '</td>';
+			           		header += '</tr>';
+		                }
+	           		}
+	           	}
+	           	if(x==0){
+                	header += '<p>Nenhuma imagem encontrada para hoje!</p>';
+                }	
+	           	
+                $('#fotos_instagram').html(header);
 	    	}	
 		});
 	}

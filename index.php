@@ -75,7 +75,6 @@
 		?>
         <!-- The JavaScript -->
         <script type="text/javascript">
-        	
 
         	atualizarFotos();
 			function atualizarFotos(){
@@ -83,15 +82,18 @@
 				var tamanho = '';
 				$.ajax({
 			    	method: "POST",
-		            url: 'gestao/ajax/slideAjax.php', 
+		            url: 'ajax.php', 
 		            async: false,   		    	
 			    	success: function(data){
 			    		var dados = JSON.parse(data);
 			           	var header = '';
 			           	for (i = 0; i < dados.length; i++) { 
-				          
-				           	header += '<a href="#"><img src="'+dados[i].standard_resolution+'" alt="'+dados[i].standard_resolution+'" /></a>\n';		           		
-			           		
+				          if(dados[i].id_foto != ''){
+				           		header += '<a href="#"><img src="'+dados[i].standard_resolution+'" alt="'+dados[i].standard_resolution+'" /></a>\n';		           		
+				          }else{
+				        	  	header += '<a href="#" ><img src="gestao/uploads/'+dados[i].standard_resolution+'" alt="gestao/uploads/'+dados[i].standard_resolution+'" /></a>\n';
+				          }
+					          
 			           	}	
 			           	tamanho=dados.length;
 		                $('.msg_thumb_wrapper').html(header);
@@ -99,7 +101,6 @@
 			    	}	
 	
 				});
-				console.log('eee - '+(tamanho*tempoAtualizar));
 				setTimeout('atualizarFotos()',(tamanho*tempoAtualizar));
 			}
 			
@@ -125,7 +126,6 @@
 					* start the slideshow
 					*/
 					play();
-					console.log($('.msg_thumb_wrapper').html());
 					/**
 					* show the controls when 
 					* mouseover the main container

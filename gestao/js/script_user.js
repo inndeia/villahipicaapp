@@ -44,12 +44,14 @@
 				}
 				$("#btn2").click(function(){
 					if(confirm('Tem certeza que deseja remover todos?')){
+						exibirLoader();
 						$.ajax({
 					    	method: 'POST',
 				            url: 'ajax/slideRemoverTodasAjax.php', 
 				            dataType: "json",
 					    	success: function(data){
 					    		atualizarUsers();
+					    		esconderLoader();
 					    	}	
 						});
 						
@@ -118,6 +120,7 @@
 				    var $tr = $botao.closest('tr');
 				    var id = $tr.children("td:nth-child(1)");
 					id = id.children("input[name=id]").val();
+					exibirLoader();
 				    $.ajax({                 
 				    	type: 'POST',                 
 				    	dataType: 'json',                 
@@ -130,6 +133,7 @@
 				    		$('#pass_edit').val(''+data[0].pass);
 				    		$('#tipo_edit option[value="'+data[0].tipo+'"]').attr('selected','selected');
 					    	$('#modal-Editar').modal('show');
+					    	esconderLoader();
 				    	}
 				    });
 
@@ -140,6 +144,7 @@
 				    var $tr = $botao.closest('tr');
 				    var id = $tr.children("td:nth-child(1)");
 					id = id.children("input[name=id]").val();
+					exibirLoader();
 				    $.ajax({                 
 				    	type: 'POST',                 
 				    	dataType: 'json',                 
@@ -147,10 +152,13 @@
 				    	data: {id:id},                 
 				    	success: function(data) {
 				    		if(data.success){
-					    		alert('Removido com sucesso!');
 					    		atualizarUsers();
+					    		esconderLoader();
+					    		alert('Removido com sucesso!');
+					    		
 				    		}else{
 				    			alert('Erro ao remover com sucesso!');
+				    			esconderLoader();
 				    		}
 				    	}
 				    });

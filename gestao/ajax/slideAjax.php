@@ -2,7 +2,7 @@
 
 	require_once('../conexao.php');
 
-	$sql = 'SELECT * FROM slide ORDER BY id DESC';
+	$sql = 'SELECT * FROM slide WHERE status=0 ORDER BY id DESC';
 	$result = $conect->query($sql);	
 	$dados = array();
 	while($row = mysqli_fetch_array($result)) { 
